@@ -1,0 +1,11 @@
+@(numList: Seq[String])
+
+@main("Task") {
+    <ul>
+        @for(num <- numList) {
+            <li>
+                @num
+            </li>
+        }
+    </ul>
+}
