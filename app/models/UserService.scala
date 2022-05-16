@@ -14,7 +14,7 @@ trait UserService {
 
   def signUpUser(signUpUserDTO: SignUpUserDTO): Future[UserDatabaseQuery]
 
-  def validateUser(loginUserDTO: LoginUserDTO): Future[Unit]
+  def validateUser(loginUserDTO: LoginUserDTO): Future[UserDatabaseQuery]
 }
 
 object UserService {
@@ -43,6 +43,10 @@ object UserService {
 
   case object UserSignedUp extends UserDatabaseQuery {
     override def objectKey: String = "USER_SIGNED_UP"
+  }
+
+  case object UserLoggedIn extends UserDatabaseQuery {
+    override def objectKey: String = "USER_LOGGED_IN"
   }
 
   case class UserNotFoundException(emailId: String)

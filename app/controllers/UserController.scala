@@ -2,7 +2,7 @@ package controllers
 
 import authentication.ControllerUtility._
 import com.google.inject.Inject
-import models.RequestDTOs.{CreateUserRequestDTO, SignUpUserDTO}
+import models.RequestDTOs.{CreateUserRequestDTO, LoginUserDTO, SignUpUserDTO}
 import models.UserService
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
@@ -28,6 +28,18 @@ class UserController @Inject()(cc: ControllerComponents,
         case Left(t: Throwable) => BadRequest(Json.toJson(failedResponse(BAD_REQUEST, "sign-up-failed",
           "Failed to sign up", t.getLocalizedMessage)))
         case Right(value) => Ok(Json.obj("status" -> "success", "user-status" -> value.objectKey))
+      }
+    }
+  }
+
+  def validateUser() = Action.async(parse.json) { implicit req =>
+    req.validateJson[LoginUserDTO] { loginUserDTO =>
+      Try {
+        userService.validateUser(loginUserDTO).safely
+      }.flattenedEither.map {
+        case Left(t: Throwable) => BadRequest(Json.toJson(failedResponse(BAD_REQUEST, "login-failed",
+          "Failed to log in", t.getLocalizedMessage)))
+        case Right(value) =>Ok(Json.obj("status" -> "success", "user-status" -> value.objectKey))
       }
     }
   }

@@ -11,6 +11,8 @@ GET     /login                      controllers.UserController.login()
 GET     /users                      controllers.UserController.getAllUsers()
 +nocsrf
 POST    /signUp                     controllers.UserController.signUpUser()
++nocsrf
+POST    /validateUser               controllers.UserController.validateUser()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

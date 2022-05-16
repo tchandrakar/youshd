@@ -51,10 +51,10 @@ class UserServiceImpl extends UserService {
     } yield userSignUpStatus).transactionally
   }
 
-  override def validateUser(loginUserDTO: LoginUserDTO): Future[Unit] = db.run {
+  override def validateUser(loginUserDTO: LoginUserDTO): Future[UserDatabaseQuery] = db.run {
     validateUserDBIO(loginUserDTO).map {
       case UserService.UserNotSignedUp => throw UserNotFoundException(loginUserDTO.emailId)
-      case UserService.UserPresentInDatabase => ()
+      case UserService.UserPresentInDatabase => UserLoggedIn
       case _ => throw UnKnownExceptionOccurred()
     }
   }
